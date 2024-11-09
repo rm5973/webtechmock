@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vowels and Consonants Counter</title>
+</head>
+<body>
+    
+    <div>
+        <input type="text" id="sting" placeholder="Enter a string">
+        <button type="submit" onclick="f()">Submit</button>
+    </div>
+
+    <div id="result">
+        <p id="vowelsCount">Vowels: 0</p>
+        <p id="consonantsCount">Consonants: 0</p>
+    </div>
+
+    <script>
+        function f() {
+            let s = document.getElementById("sting").value;
+            let vowels = 0;
+            let consonants = 0;
+            let vowelsList = "aeiouAEIOU"; 
+            
+            for (let char of s) {
+                if (char >= 'a' && char <= 'z' || char >= 'A' && char <= 'Z') { 
+                    if (vowelsList.indexOf(char) !== -1) { 
+                        vowels++;
+                    } else { 
+                        consonants++;
+                    }
+                }
+            }
+
+           
+            document.getElementById("vowelsCount").innerText = "Vowels: " + vowels;
+            document.getElementById("consonantsCount").innerText = "Consonants: " + consonants;
+        }
+    </script>
+
+</body>
+</html>

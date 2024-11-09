@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSpiders</title>
+    
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .icon-j {
+            font-style: italic;
+            font-size: 4rem; 
+            margin-right: 10px;
+        }
+        .gradient-bg {
+            background: linear-gradient(to bottom,#007AFF, #6B66E3,white);
+        }
+        .list-item {
+            transition: color 0.3s, text-decoration 0.3s;
+        }
+        .list-item.checked {
+            text-decoration: line-through;
+            color: gray;
+        }
+        .delete-icon {
+            cursor: pointer;
+            color: red;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="bg-primary text-white text-center py-4 d-flex justify-content-center align-items-center">
+        <span class="icon-j">J</span>
+        <h1 class="mb-0">JSpiders</h1>
+    </header>
+
+    <nav class="navbar gradient-bg py-2">
+        <div class="container d-flex justify-content-start align-items-center">
+            <span class="text-white font-weight-bold mr-3">What do we need to carry for attending class:</span>
+
+            <select id="itemDropdown" class="custom-select mr-3">
+                <option value="default">Items</option>
+                <option value="Notes">Notes</option>
+                <option value="Laptop">Laptop</option>
+                <option value="Pen">Pen</option>
+            </select>
+            <div class="py-2"></div>
+            
+            <select id="quantityDropdown" class="custom-select mr-3">
+                <option value="0">Count</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+          <div class="py-2"></div>
+            <button class="btn btn-primary" onclick="addItem()">Add</button>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div id="displayList" class="row font-weight-bold"></div>
+        <div id="itemCount" class="mt-3 font-weight-bold">Total items: 0</div>
+        <div id="checkedPercentage" class="mt-2 font-weight-bold">Checked items: 0%</div>
+    </div>
+
+    <script>
+        let totalItems = 0;
+        let checkedItems = 0;
+
+        function updateItemCount() {
+            document.getElementById('itemCount').innerText = `Total items: ${totalItems}`;
+            updateCheckedPercentage();
+        }
+
+        function updateCheckedPercentage() {
+            const percentage = totalItems === 0 ? 0 : Math.round((checkedItems / totalItems) * 100);
+            document.getElementById('checkedPercentage').innerText = `Checked items: ${percentage}%`;
+        }
+
+        function addItem() {
+            const item = document.getElementById('itemDropdown').value;
+            const quantity = document.getElementById('quantityDropdown').value;
+            const displayList = document.getElementById('displayList');
+            
+            if (item === "default" || quantity === "0") {
+                alert("Please select both an item and a quantity.");
+                return;
+            }
+
+            const listItem = document.createElement('div');
+            listItem.classList.add('col-md-6', 'd-flex', 'align-items-center', 'list-item');
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.classList.add('mr-2');
+            checkbox.onclick = function() {
+                if (checkbox.checked) {
+                    checkedItems++;
+                } else {
+                    checkedItems--;
+                }
+                updateCheckedPercentage();
+                listItem.classList.toggle('checked');
+            };
+
+            const itemText = document.createTextNode(`${quantity} ${item}`);
+
+            const deleteIcon = document.createElement('span');
+            deleteIcon.classList.add('delete-icon');
+            deleteIcon.innerHTML = '&times;';
+            deleteIcon.onclick = function() {
+                displayList.removeChild(listItem);
+                if (checkbox.checked) {
+                    checkedItems--;
+                }
+                totalItems--;
+                updateItemCount();
+            };
+
+            listItem.appendChild(checkbox);
+            listItem.appendChild(itemText);
+            listItem.appendChild(deleteIcon);
+            displayList.appendChild(listItem);
+
+            totalItems++;
+            updateItemCount();
+
+            document.getElementById('itemDropdown').value = "default";
+            document.getElementById('quantityDropdown').value = "0";
+        }
+    </script>
+
+</body>
+</html>
